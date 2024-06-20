@@ -2,13 +2,12 @@ from fastapi import FastAPI
 from api.auth import router as auth_router
 from api.task import router as task_router
 from fastapi.middleware.cors import CORSMiddleware
+from api.archivetask import router as archive_task_router
 
 app = FastAPI()
 
 
-origins = [
-   "*"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,6 +20,7 @@ app.add_middleware(
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 app.include_router(task_router, prefix="/api/task", tags=["task"])
+app.include_router(archive_task_router, prefix="/api/archive", tags=["archive"])
 
 if __name__ == "__main__":
     import uvicorn
