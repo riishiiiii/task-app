@@ -4,6 +4,9 @@ from database.database import get_db
 from sqlalchemy.orm import Session
 import uuid
 from .taskservice import TaskNotFound
+from schemas.task import AllTasks, SingleTask
+from datetime import datetime
+from collections import defaultdict
 
 
 class ArchiveTaskService:
@@ -30,14 +33,21 @@ class ArchiveTaskService:
             raise e
         return task_to_archive
 
-    async def get_all_archive_task_for_user(
-        self, user: models.User
-    ) -> list[models.ArchiveTask]:
-        return (
+    async def get_all_archive_task_for_user(self, user: models.User) -> AllTasks:
+        tasks = (
             self.db.query(models.ArchiveTask)
             .filter(models.ArchiveTask.user_id == user.user_id)
             .all()
         )
+
+        all_tasks = defaultdict(list)
+        today = datetime.now().date()
+
+        for task in tasks:
+            key = "today" if task.created_at.date() == today else task.created_at.date()
+            all_tasks[key].append(SingleTask.from_orm(task))
+
+        return AllTasks(tasks=dict(all_tasks))
 
     async def remove_from_archive(self, task_id: uuid.UUID) -> None:
         task = (

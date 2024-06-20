@@ -13,25 +13,25 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="p-6 shadow-lg">
+    <nav className="p-6 shadow-lg bg-black">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-black text-3xl font-bold tracking-wider">Tasks</div>
+        <div className="text-white text-3xl font-bold tracking-wider">Tasks</div>
         <div className="space-x-8">
           <a
             href="#"
-            className="text-black text-lg hover:text-gray-300 transition duration-300"
+            className="text-white text-lg hover:text-gray-300 transition duration-300"
           >
             Home
           </a>
           <a
             href="#"
-            className="text-black text-lg hover:text-gray-300 transition duration-300"
+            className="text-white text-lg hover:text-gray-300 transition duration-300"
           >
             About
           </a>
           <a
             href="#"
-            className="text-black text-lg hover:text-gray-300 transition duration-300"
+            className="text-white text-lg hover:text-gray-300 transition duration-300"
           >
             Contact
           </a>

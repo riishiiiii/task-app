@@ -5,6 +5,7 @@ from database.database import get_db
 from schemas.task import CreateTask, SingleTask, UpdateTask, AllTasks
 import uuid
 from datetime import datetime, timezone
+from collections import defaultdict
 
 
 class TaskNotFound(Exception):
@@ -43,17 +44,18 @@ class TaskService:
             .order_by(models.Task.created_at.desc())
             .all()
         )
-        all_tasks = {}
-        for task in tasks:
-            if task.created_at.date() == datetime.now().date():
-                if "today" not in all_tasks:
-                    all_tasks["today"] = []
-                all_tasks["today"].append(SingleTask.from_orm(task))
-            else:
-                if task.created_at.date() not in all_tasks:
-                    all_tasks[task.created_at.date()] = []
-                all_tasks[task.created_at.date()].append(SingleTask.from_orm(task))
-        return AllTasks(tasks=all_tasks)
+        
+        if len(tasks) == 0:
+            return AllTasks(tasks={})
+        else:
+            all_tasks = defaultdict(list)
+            today = datetime.now().date()
+
+            for task in tasks:
+                key = "today" if task.created_at.date() == today else task.created_at.date()
+                all_tasks[key].append(SingleTask.from_orm(task))
+
+            return AllTasks(tasks=dict(all_tasks))
 
     async def delete_task(self, task_id: uuid.UUID) -> None:
         task = self.db.query(models.Task).filter(models.Task.task_id == task_id).first()
