@@ -149,14 +149,14 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-blue-200">
       {/* Main content */}
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-6 text-gray-800">Tasks</h2>
 
           {/* Add Task Section */}
-          <div className="bg-white rounded-lg shadow-sm mb-8 p-6">
+          <div className="bg-white rounded-lg shadow-md mb-8 p-6">
             <h3 className="text-xl font-semibold mb-4 text-gray-700">
               Add New Task
             </h3>
@@ -184,7 +184,7 @@ const Dashboard = () => {
 
           {/* Tasks List */}
           {Object.keys(tasksPerDay).length === 0 ? (
-            <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <p className="text-gray-500 text-lg">
                 No tasks listed. Add a new task to get started!
               </p>

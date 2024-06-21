@@ -15,7 +15,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-black-100 border-r border--200 h-screen p-6 flex flex-col">
+    <div className="w-64 bg-blue-400 border-r border--200 h-screen p-6 flex flex-col">
       <div>
         <h1 className="text-3xl font-bold mb-6 text-gray-800">TASKME</h1>
         <nav>
@@ -23,7 +23,7 @@ const Sidebar = () => {
             <li className="mb-2">
               <Link
                 to="/dashboard"
-                className={`text-gray-700 hover:text-gray-900 ${
+                className={`text-gray-700 text-lg hover:text-gray-900 ${
                   location.pathname === "/dashboard" ? "font-bold" : ""
                 }`}
               >
@@ -33,7 +33,7 @@ const Sidebar = () => {
             <li className="mb-2">
               <Link
                 to="/archive"
-                className={`text-gray-700 hover:text-gray-900 ${
+                className={`text-gray-700 text-lg hover:text-gray-900 ${
                   location.pathname === "/archive" ? "font-bold" : ""
                 }`}
               >
