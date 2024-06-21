@@ -3,27 +3,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const todoToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="));
-    if (!todoToken) {
-      navigate("/");
-    }
-  }, [navigate]);
-
-  const [task, setTask] = useState("");
-  const [completed, setCompleted] = useState(false);
-  const [tasksPerDay, setTasksPerDay] = useState({});
-
   const getTodoToken = () => {
     return document.cookie
       .split("; ")
       .find((row) => row.startsWith("todoToken="))
       ?.split("=")[1];
   };
+
+  const [task, setTask] = useState("");
+  const [completed, setCompleted] = useState(false);
+  const [tasksPerDay, setTasksPerDay] = useState({});
 
   const addTask = async () => {
     if (!task.trim()) {
@@ -144,6 +133,7 @@ const Dashboard = () => {
       }
     }
   };
+  
   useEffect(() => {
     fetchTasks();
   }, []);

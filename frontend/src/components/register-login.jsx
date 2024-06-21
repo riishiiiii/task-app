@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 const RegisterLogin = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("");
 
   useEffect(() => {
     const todoToken = document.cookie
@@ -19,9 +21,8 @@ const RegisterLogin = () => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
 
-  const [loginEmail, setLoginEmail] = useState("");
+  const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-
   const handleRegister = async () => {
     try {
       const response = await axios.post(
@@ -38,9 +39,13 @@ const RegisterLogin = () => {
         setRegisterUsername("");
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 3000);
+        setPopupMessage("Registered successfully!");
+        setPopupType("success");
       }
     } catch (error) {
-      console.error("There was an error registering!", error);
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
+      setPopupMessage(error.response.data.detail);
     }
   };
 
@@ -49,14 +54,13 @@ const RegisterLogin = () => {
       const response = await axios.post(
         "http://localhost:8000/api/auth/login",
         {
-          email: loginEmail,
+          username: loginUsername,
           password: loginPassword,
         }
       );
       if (response.status === 200) {
-        setLoginEmail("");
+        setLoginUsername("");
         setLoginPassword("");
-        console.log(response.data);
         document.cookie = `todoToken=${response.data.todoToken}; path=/;`;
         navigate("/dashboard");
       }
@@ -68,8 +72,8 @@ const RegisterLogin = () => {
   return (
     <div className="flex h-screen">
       {showPopup && (
-        <div className="fixed top-0 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded">
-          Registered successfully!
+        <div className={`fixed top-0 left-1/2 transform -translate-x-1/2 ${popupType === "success" ? "bg-green-5000" : "bg-red-500"} text-white px-4 py-2 rounded`}>
+          {popupMessage}
         </div>
       )}
       <div className="w-1/2 bg-purple-600 flex flex-col justify-center items-center p-8 shadow-2xl">
@@ -141,17 +145,17 @@ const RegisterLogin = () => {
           <div className="mb-5">
             <label
               className="block text-black text-base font-medium mb-3"
-              htmlFor="login-email"
+              htmlFor="login-username"
             >
-              Email
+              Username
             </label>
             <input
               className="shadow-md appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-              id="login-email"
-              type="email"
-              placeholder="Enter your email"
-              value={loginEmail}
-              onChange={(e) => setLoginEmail(e.target.value)}
+              id="login-username"
+              type="text"
+              placeholder="Enter your username"
+              value={loginUsername}
+              onChange={(e) => setLoginUsername(e.target.value)}
             />
           </div>
           <div className="mb-8">

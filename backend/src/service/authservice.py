@@ -9,7 +9,7 @@ from .jwtservice import validate_user
 
 
 class UserAlreadyExists(Exception):
-    def __init__(self, message: str = "User with this email already exists"):
+    def __init__(self, message: str = "User already exists"):
         self.message = message
 
 
@@ -36,5 +36,5 @@ class AuthService:
             self.db.rollback()
             raise
 
-    async def login_user(self, email: str, password: str) -> dict:
-        return validate_user(self.db, email, password)
+    async def login_user(self, username: str, password: str) -> dict:
+        return validate_user(self.db, username, password)

@@ -80,10 +80,10 @@ class JWTBearerService(HTTPBearer):
             raise HTTPException(status_code=403)
 
 
-def validate_user(db: Session, email: str, password: str) -> bool:
-    existing_user = db.query(models.User).filter(models.User.email == email).first()
+def validate_user(db: Session, username: str, password: str) -> bool:
+    existing_user = db.query(models.User).filter(models.User.username == username).first()
     if existing_user is None:
-        raise NoResultFound("User with this email does not exist")
+        raise NoResultFound("User with this username does not exist")
     if bcrypt.verify(password, existing_user.password):
         _todoToken = jwt.encode(
             {"user_id": str(existing_user.user_id)},

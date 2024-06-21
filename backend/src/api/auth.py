@@ -21,6 +21,6 @@ async def register(
 @router.post("/login")
 async def login(user: UserLogin, auth_service: AuthService = Depends(AuthService)):
     try:
-        return await auth_service.login_user(user.email, user.password)
+        return await auth_service.login_user(user.username, user.password)
     except NoResultFound as e:
         raise HTTPException(status_code=404, detail=str(e))

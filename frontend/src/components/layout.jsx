@@ -1,8 +1,24 @@
 // components/Layout.jsx
 import React from "react";
 import Sidebar from "./sidebar";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Layout = ({ children }) => {
+  const navigate = useNavigate();
+  const getTodoToken = () => {
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("todoToken="))
+      ?.split("=")[1];
+  };
+
+  useEffect(() => {
+    const todoToken = getTodoToken();
+    if (!todoToken) {
+      navigate("/");
+    }
+  }, [navigate]);
   return (
     <div className="flex h-screen border-t border-gray-200 bg-gray-300">
       <Sidebar />
