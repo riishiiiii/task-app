@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 import uuid
+from datetime import datetime
+from typing import Dict
 
 
 class CreateTask(BaseModel):
@@ -11,6 +13,22 @@ class SingleTask(BaseModel):
     user_id: uuid.UUID
     task: str
     completed: bool
+    created_at: datetime
+
+    @classmethod
+    def from_orm(cls, task):
+        return cls(
+            task_id=task.task_id,
+            user_id=task.user_id,
+            task=task.task,
+            completed=task.completed,
+            created_at=task.created_at,
+        )
+
 
 class UpdateTask(BaseModel):
     completed: bool
+
+
+class AllTasks(BaseModel):
+    tasks: Dict[str, list[SingleTask]]

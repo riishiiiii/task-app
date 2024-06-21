@@ -1,11 +1,10 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const todoToken = document.cookie
@@ -37,7 +36,8 @@ const RegisterLogin = () => {
         setRegisterEmail("");
         setRegisterPassword("");
         setRegisterUsername("");
-        console.log("Registered successfully");
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
       }
     } catch (error) {
       console.error("There was an error registering!", error);
@@ -67,6 +67,11 @@ const RegisterLogin = () => {
 
   return (
     <div className="flex h-screen">
+      {showPopup && (
+        <div className="fixed top-0 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded">
+          Registered successfully!
+        </div>
+      )}
       <div className="w-1/2 bg-purple-600 flex flex-col justify-center items-center p-8 shadow-2xl">
         <h2 className="text-4xl font-extrabold mb-4 text-white">Register</h2>
         <form id="register-form" className="w-full max-w-sm">
