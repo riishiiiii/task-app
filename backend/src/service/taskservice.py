@@ -44,7 +44,7 @@ class TaskService:
             .order_by(models.Task.created_at.desc())
             .all()
         )
-        
+
         if len(tasks) == 0:
             return AllTasks(tasks={})
         else:
@@ -52,7 +52,11 @@ class TaskService:
             today = datetime.now().date()
 
             for task in tasks:
-                key = "today" if task.created_at.date() == today else task.created_at.date()
+                key = (
+                    "today"
+                    if task.created_at.date() == today
+                    else task.created_at.date()
+                )
                 all_tasks[key].append(SingleTask.from_orm(task))
 
             return AllTasks(tasks=dict(all_tasks))

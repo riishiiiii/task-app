@@ -26,6 +26,11 @@ const Dashboard = () => {
   };
 
   const addTask = async () => {
+    if (!task.trim()) {
+      console.log("Task cannot be empty");
+      return;
+    }
+
     const todoToken = getTodoToken();
 
     const response = await axios.post(
@@ -44,7 +49,6 @@ const Dashboard = () => {
       window.location.reload();
     }
   };
-
   const updateTask = async (id) => {
     const todoToken = getTodoToken();
     setCompleted(!completed);
@@ -111,14 +115,41 @@ const Dashboard = () => {
     }
   };
 
+  const handleArchive = async (taskId) => {
+    const todoToken = getTodoToken();
+    console.log(todoToken);
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/archive/${taskId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${todoToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        console.log("Task archived successfully");
+        window.location.reload();
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 403) {
+        console.error(
+          "Error: Access forbidden. You do not have permission to archive this task."
+        );
+      } else {
+        console.error("An error occurred while archiving the task:", error);
+      }
+    }
+  };
   useEffect(() => {
     fetchTasks();
   }, []);
 
   return (
     <div className="flex h-screen bg-gray-50">
-     
-
       {/* Main content */}
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
@@ -136,6 +167,11 @@ const Dashboard = () => {
                 placeholder="Enter your task"
                 value={task}
                 onChange={(e) => setTask(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter" && task.trim() !== "") {
+                    addTask();
+                  }
+                }}
               />
               <button
                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-r-lg transition duration-150 ease-in-out"
@@ -185,6 +221,10 @@ const Dashboard = () => {
                             {task.task}
                           </span>
                         </div>
+                        <div className="text-sm text-gray-500 ml-4 pr-5">
+                          <span className="font-medium">Created at:</span>{" "}
+                          {new Date(task.created_at).toLocaleTimeString()}
+                        </div>
                         <div className="relative">
                           <button
                             className="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -208,13 +248,20 @@ const Dashboard = () => {
                           {task.showMenu && (
                             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                               <div className="py-1">
-
                                 <button
                                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   onClick={() => handleDelete(task.task_id)}
                                 >
                                   Delete
                                 </button>
+                                {task.completed && (
+                                  <button
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    onClick={() => handleArchive(task.task_id)}
+                                  >
+                                    Archive
+                                  </button>
+                                )}
                               </div>
                             </div>
                           )}
