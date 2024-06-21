@@ -70,121 +70,106 @@ const RegisterLogin = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.deepai.org/art-image/64ea15bda9934180acbd90207f083b79/create-me-an-oil-pasted-image-of-a-person-thinking-wh.jpg')" }}>
       {showPopup && (
-        <div className={`fixed top-0 left-1/2 transform -translate-x-1/2 ${popupType === "success" ? "bg-green-5000" : "bg-red-500"} text-white px-4 py-2 rounded`}>
+        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 ${popupType === "success" ? "bg-green-500" : "bg-red-500"} text-white px-6 py-3 rounded-lg shadow-2xl z-50 transition-all duration-300 ease-in-out`}>
           {popupMessage}
         </div>
       )}
-      <div className="w-1/2 bg-purple-600 flex flex-col justify-center items-center p-8 shadow-2xl">
-        <h2 className="text-4xl font-extrabold mb-4 text-white">Register</h2>
-        <form id="register-form" className="w-full max-w-sm">
-          <div className="mb-5">
-            <label
-              className="block text-black text-base font-medium mb-3"
-              htmlFor="register-username"
-            >
-              Username
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-              id="register-username"
-              type="text"
-              placeholder="Enter your username"
-              value={registerUsername}
-              onChange={(e) => setRegisterUsername(e.target.value)}
-            />
+      <div className="m-auto bg-white  rounded-2xl border border-gray-200 shadow-2xl flex w-3/4 max-w-4xl flex-col items-center p-6">
+        <h1 className="text-4xl font-bold text-indigo-800 mb-6">Let's Plan Your Task!</h1>
+        <div className="w-full flex flex-row">
+          <div className="w-1/2 p-12">
+            <h2 className="text-3xl font-bold text-indigo-800 mb-8">Register</h2>
+            <form id="register-form" className="space-y-6">
+              <div>
+                <label className="text-sm font-semibold text-gray-600 block" htmlFor="register-username">
+                  Username
+                </label>
+                <input
+                  className="w-full p-3 mt-1 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
+                  id="register-username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={registerUsername}
+                  onChange={(e) => setRegisterUsername(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-gray-600 block" htmlFor="register-email">
+                  Email
+                </label>
+                <input
+                  className="w-full p-3 mt-1 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
+                  id="register-email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={registerEmail}
+                  onChange={(e) => setRegisterEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-gray-600 block" htmlFor="register-password">
+                  Password
+                </label>
+                <input
+                  className="w-full p-3 mt-1 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
+                  id="register-password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={registerPassword}
+                  onChange={(e) => setRegisterPassword(e.target.value)}
+                />
+              </div>
+              <button
+                className="w-full bg-indigo-600 text-white p-3 rounded-lg font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 transition duration-200"
+                type="button"
+                onClick={handleRegister}
+              >
+                Register
+              </button>
+            </form>
           </div>
-          <div className="mb-5">
-            <label
-              className="block text-black text-base font-medium mb-3"
-              htmlFor="register-email"
-            >
-              Email
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-              id="register-email"
-              type="email"
-              placeholder="Enter your email"
-              value={registerEmail}
-              onChange={(e) => setRegisterEmail(e.target.value)}
-            />
+          <div className="w-1/2 bg-indigo-600 text-white rounded-r-2xl p-12 flex flex-col justify-center items-center">
+            <h2 className="text-3xl font-bold mb-8">Welcome Back!</h2>
+            <form id="login-form" className="w-full space-y-6">
+              <div>
+                <label className="text-sm font-semibold block" htmlFor="login-username">
+                  Username
+                </label>
+                <input
+                  className="w-full p-3 mt-1 bg-indigo-500 bg-opacity-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition duration-200"
+                  id="login-username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={loginUsername}
+                  onChange={(e) => setLoginUsername(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-semibold block" htmlFor="login-password">
+                  Password
+                </label>
+                <input
+                  className="w-full p-3 mt-1 bg-indigo-500 bg-opacity-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition duration-200"
+                  id="login-password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                />
+              </div>
+              <button
+                className="w-full bg-white text-indigo-600 p-3 rounded-lg font-semibold hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600 transition duration-200"
+                type="button"
+                onClick={handleLogin}
+              >
+                Login
+              </button>
+            </form>
+            <p id="login-message" className="mt-4 text-red-300"></p>
           </div>
-          <div className="mb-8">
-            <label
-              className="block text-black text-base font-medium mb-3"
-              htmlFor="register-password"
-            >
-              Password
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-              id="register-password"
-              type="password"
-              placeholder="Enter your password"
-              value={registerPassword}
-              onChange={(e) => setRegisterPassword(e.target.value)}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg focus:outline-none focus:shadow-outline transition duration-300"
-              type="button"
-              onClick={handleRegister}
-            >
-              Register
-            </button>
-          </div>
-        </form>
-        <p id="register-message" className="mt-4 text-red-500"></p>
-      </div>
-      <div className="w-1/2 bg-green-100 flex flex-col justify-center items-center p-8 shadow-lg">
-        <h2 className="text-3xl font-bold mb-6 text-black">Login</h2>
-        <form id="login-form" className="w-full max-w-md">
-          <div className="mb-5">
-            <label
-              className="block text-black text-base font-medium mb-3"
-              htmlFor="login-username"
-            >
-              Username
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-              id="login-username"
-              type="text"
-              placeholder="Enter your username"
-              value={loginUsername}
-              onChange={(e) => setLoginUsername(e.target.value)}
-            />
-          </div>
-          <div className="mb-8">
-            <label
-              className="block text-black text-base font-medium mb-3"
-              htmlFor="login-password"
-            >
-              Password
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 mb-4 leading-tight focus:outline-none focus:shadow-outline"
-              id="login-password"
-              type="password"
-              placeholder="Enter your password"
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg focus:outline-none focus:shadow-outline transition duration-300"
-              type="button"
-              onClick={handleLogin}
-            >
-              Login
-            </button>
-          </div>
-        </form>
-        <p id="login-message" className="mt-4 text-red-500"></p>
+        </div>
       </div>
     </div>
   );

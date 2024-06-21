@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Dashboard = () => {
@@ -139,11 +138,14 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-blue-200">
+    // <div className="flex h-screen bg-gradient-to-l from-white to-gray-200">
+    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.deepai.org/art-image/64ea15bda9934180acbd90207f083b79/create-me-an-oil-pasted-image-of-a-person-thinking-wh.jpg')", filter: "blue(1)" }}>
       {/* Main content */}
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Tasks</h2>
+          <div className="bg-blue-500 rounded-lg">
+            <h2 className="p-2 text-3xl font-bold mb-6 text-black">Tasks</h2>
+          </div>
 
           {/* Add Task Section */}
           <div className="bg-white rounded-lg shadow-md mb-8 p-6">
@@ -164,15 +166,15 @@ const Dashboard = () => {
                 }}
               />
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-r-lg transition duration-150 ease-in-out"
+                className="bg-gradient-to-r from-blue-300 to-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-r-lg transition duration-150 ease-in-out"
                 onClick={addTask}
               >
                 Add Task
               </button>
             </div>
           </div>
-
           {/* Tasks List */}
+
           {Object.keys(tasksPerDay).length === 0 ? (
             <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <p className="text-gray-500 text-lg">
@@ -181,7 +183,7 @@ const Dashboard = () => {
             </div>
           ) : (
             Object.entries(tasksPerDay).map(([day, tasks]) => (
-              <div key={day} className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <div key={day} className="bg-white border border-gray-200 shadow-lg rounded-lg p-6 mb-6">
                 <h3 className="text-xl font-semibold mb-4 text-gray-700 capitalize">
                   {day}
                 </h3>
@@ -261,6 +263,7 @@ const Dashboard = () => {
                   </ul>
                 )}
               </div>
+              
             ))
           )}
         </div>
