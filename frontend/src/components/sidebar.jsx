@@ -5,10 +5,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const todoToken = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("todoToken="));
-
   const handleLogout = () => {
     document.cookie = "todoToken=; Max-Age=0; path=/;";
     navigate("/");
