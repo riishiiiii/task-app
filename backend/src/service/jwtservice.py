@@ -81,7 +81,9 @@ class JWTBearerService(HTTPBearer):
 
 
 def validate_user(db: Session, username: str, password: str) -> bool:
-    existing_user = db.query(models.User).filter(models.User.username == username).first()
+    existing_user = (
+        db.query(models.User).filter(models.User.username == username).first()
+    )
     if existing_user is None:
         raise NoResultFound("User with this username does not exist")
     if bcrypt.verify(password, existing_user.password):

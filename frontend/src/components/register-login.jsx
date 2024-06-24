@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import boy2 from "../images/boy.png";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const RegisterLogin = () => {
   };
 
   return (
-    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.deepai.org/art-image/64ea15bda9934180acbd90207f083b79/create-me-an-oil-pasted-image-of-a-person-thinking-wh.jpg')" }}>
+    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: `url(${boy2})` }}>
       {showPopup && (
         <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 ${popupType === "success" ? "bg-green-500" : "bg-red-500"} text-white px-6 py-3 rounded-lg shadow-2xl z-50 transition-all duration-300 ease-in-out`}>
           {popupMessage}

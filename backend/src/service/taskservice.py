@@ -55,7 +55,7 @@ class TaskService:
                 key = (
                     "today"
                     if task.created_at.date() == today
-                    else task.created_at.date()
+                    else task.created_at.date().strftime("%d-%m-%Y")
                 )
                 all_tasks[key].append(SingleTask.from_orm(task))
 

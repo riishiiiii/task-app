@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import boy from "../images/boy.png";
 
 const Dashboard = () => {
   const getTodoToken = () => {
@@ -139,7 +140,7 @@ const Dashboard = () => {
 
   return (
     // <div className="flex h-screen bg-gradient-to-l from-white to-gray-200">
-    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.deepai.org/art-image/64ea15bda9934180acbd90207f083b79/create-me-an-oil-pasted-image-of-a-person-thinking-wh.jpg')", filter: "blue(1)" }}>
+    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: `url(${boy})`, filter: "blue(1)" }}>
       {/* Main content */}
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
@@ -154,7 +155,7 @@ const Dashboard = () => {
             </h3>
             <div className="flex">
               <input
-                className="flex-grow shadow-sm border border-gray-300 rounded-l-lg py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-grow shadow-sm border border-gray-300 rounded-l-lg py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent"
                 type="text"
                 placeholder="Enter your task"
                 value={task}

@@ -13,7 +13,7 @@ class SingleTask(BaseModel):
     user_id: uuid.UUID
     task: str
     completed: bool
-    created_at: datetime
+    created_at: datetime | str
 
     @classmethod
     def from_orm(cls, task):
@@ -31,4 +31,4 @@ class UpdateTask(BaseModel):
 
 
 class AllTasks(BaseModel):
-    tasks: Dict[str, list[SingleTask]]
+    tasks: Dict[str | datetime, list[SingleTask]]
