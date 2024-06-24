@@ -37,6 +37,7 @@ class ArchiveTaskService:
         tasks = (
             self.db.query(models.ArchiveTask)
             .filter(models.ArchiveTask.user_id == user.user_id)
+            .order_by(models.ArchiveTask.created_at.desc())
             .all()
         )
 
@@ -44,7 +45,11 @@ class ArchiveTaskService:
         today = datetime.now().date()
 
         for task in tasks:
-            key = "today" if task.created_at.date() == today else task.created_at.date()
+            key = (
+                "today"
+                if task.created_at.date() == today
+                else task.created_at.date().strftime("%d-%m-%Y")
+            )
             all_tasks[key].append(SingleTask.from_orm(task))
 
         return AllTasks(tasks=dict(all_tasks))

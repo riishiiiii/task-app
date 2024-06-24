@@ -1,6 +1,7 @@
 // pages/Archive.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import boy from "../images/boy.png";
 
 const Archive = () => {
   const [archivedTasksPerDay, setArchivedTasksPerDay] = useState({});
@@ -72,7 +73,7 @@ const Archive = () => {
   };
 
   return (
-    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.deepai.org/art-image/64ea15bda9934180acbd90207f083b79/create-me-an-oil-pasted-image-of-a-person-thinking-wh.jpg')", filter: "blue(1)" }}>
+    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: `url(${boy})` }}>
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
             <div className=" rounded-lg  bg-blue-500">

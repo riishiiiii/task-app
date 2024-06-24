@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 
+
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-gradient-to-b from-blue-400 to-blue-800 border-r border-blue-200 h-screen p-6 flex flex-col shadow-lg">
+    <div className="w-64 bg-gradient-to-b from-blue-600 to-blue-800 border-r border-blue-200 h-screen p-6 flex flex-col shadow-lg">
     <div>
       <div className="flex items-center mb-8">
         <svg
