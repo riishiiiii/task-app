@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import boy2 from "../images/boy.png";
 import logo from "../logos/png/logo-black.png";
+import Popup from "./popup";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
@@ -56,15 +57,19 @@ const RegisterLogin = () => {
     }
 
     try {
-      const response = await axios.post(`${backendUrl}/api/auth/register`, {
-        username: registerUsername,
-        email: registerEmail,
-        password: registerPassword,
-      }, {
-        headers: {
-          'Access-Control-Allow-Origin': '*'
+      const response = await axios.post(
+        `${backendUrl}/api/auth/register`,
+        {
+          username: registerUsername,
+          email: registerEmail,
+          password: registerPassword,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
         }
-      });
+      );
       if (response.status === 200) {
         setRegisterEmail("");
         setRegisterPassword("");
@@ -83,14 +88,18 @@ const RegisterLogin = () => {
   };
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${backendUrl}/api/auth/login`, {
-        username: loginUsername,
-        password: loginPassword,
-      }, {
-        headers: {
-          'Access-Control-Allow-Origin': '*'
+      const response = await axios.post(
+        `${backendUrl}/api/auth/login`,
+        {
+          username: loginUsername,
+          password: loginPassword,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
         }
-      });
+      );
       if (response.status === 200) {
         setLoginUsername("");
         setLoginPassword("");
@@ -107,15 +116,12 @@ const RegisterLogin = () => {
       className="flex h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${boy2})` }}
     >
-      {showPopup && (
-        <div
-          className={`fixed top-4 left-1/2 transform -translate-x-1/2 ${
-            popupType === "success" ? "bg-green-500" : "bg-red-500"
-          } text-white px-6 py-3 rounded-lg shadow-2xl z-50 transition-all duration-300 ease-in-out`}
-        >
-          {popupMessage}
-        </div>
-      )}
+      <Popup
+        showPopup={showPopup}
+        popupMessage={popupMessage}
+        popupType={popupType}
+        setShowPopup={setShowPopup}
+      />
       <div className="m-auto bg-white  rounded-2xl border border-gray-200 shadow-2xl flex w-3/4 max-w-4xl flex-col items-center p-6">
         <div className="flex items-center mb-6">
           <img src={logo} alt="Logo" className="w-32 h-32 mr-4" />

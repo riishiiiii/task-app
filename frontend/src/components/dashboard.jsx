@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import boy from "../images/boy.png";
-
+import Popup from "./popup";
 
 const Dashboard = () => {
   const getTodoToken = () => {
@@ -16,9 +16,15 @@ const Dashboard = () => {
   const [completed, setCompleted] = useState(false);
   const [tasksPerDay, setTasksPerDay] = useState({});
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("");
+
   const addTask = async () => {
     if (!task.trim()) {
-      console.log("Task cannot be empty");
+      setPopupMessage("Task cannot be empty");
+      setPopupType("error");
+      setShowPopup(true);
       return;
     }
 
@@ -52,9 +58,8 @@ const Dashboard = () => {
         },
       }
     );
-    console.log(response);
+
     if (response.status === 200) {
-      console.log("Task updated successfully");
       window.location.reload();
     }
   };
@@ -70,7 +75,6 @@ const Dashboard = () => {
 
     if (response.status === 200) {
       setTasksPerDay(response.data.tasks);
-      console.log("Tasks fetched successfully");
     }
   };
 
@@ -87,15 +91,12 @@ const Dashboard = () => {
 
   const handleDelete = async (taskId) => {
     const todoToken = getTodoToken();
-    const response = await axios.delete(
-      `${backendUrl}/api/task/${taskId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${todoToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.delete(`${backendUrl}/api/task/${taskId}`, {
+      headers: {
+        Authorization: `Bearer ${todoToken}`,
+        "Content-Type": "application/json",
+      },
+    });
     if (response.status === 200) {
       window.location.reload();
     }
@@ -103,7 +104,6 @@ const Dashboard = () => {
 
   const handleArchive = async (taskId) => {
     const todoToken = getTodoToken();
-    console.log(todoToken);
     try {
       const response = await axios.post(
         `${backendUrl}/api/archive/${taskId}`,
@@ -115,29 +115,40 @@ const Dashboard = () => {
           },
         }
       );
-      console.log(response);
       if (response.status === 200) {
-        console.log("Task archived successfully");
         window.location.reload();
       }
     } catch (error) {
       if (error.response && error.response.status === 403) {
-        console.error(
+        setPopupMessage(
           "Error: Access forbidden. You do not have permission to archive this task."
         );
+        setPopupType("error");
+        setShowPopup(true);
       } else {
-        console.error("An error occurred while archiving the task:", error);
+        setPopupMessage("An error occurred while archiving the task:", error);
+        setPopupType("error");
+        setShowPopup(true);
       }
     }
   };
-  
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
   return (
     // <div className="flex h-screen bg-gradient-to-l from-white to-gray-200">
-    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: `url(${boy})`, filter: "blue(1)" }}>
+    <div
+      className="flex h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${boy})`, filter: "blue(1)" }}
+    >
+      <Popup
+        showPopup={showPopup}
+        popupMessage={popupMessage}
+        popupType={popupType}
+        setShowPopup={setShowPopup}
+      />
       {/* Main content */}
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
@@ -181,7 +192,10 @@ const Dashboard = () => {
             </div>
           ) : (
             Object.entries(tasksPerDay).map(([day, tasks]) => (
-              <div key={day} className="bg-white border border-gray-200 shadow-lg rounded-lg p-6 mb-6">
+              <div
+                key={day}
+                className="bg-white border border-gray-200 shadow-lg rounded-lg p-6 mb-6"
+              >
                 <h3 className="text-xl font-semibold mb-4 text-gray-700 capitalize">
                   {day}
                 </h3>
@@ -261,7 +275,6 @@ const Dashboard = () => {
                   </ul>
                 )}
               </div>
-              
             ))
           )}
         </div>
