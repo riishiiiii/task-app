@@ -35,3 +35,11 @@ To run the Todo App using Docker Compose, follow these steps:
 
 To stop the app, run:
 
+   ```sh
+   docker-compose down
+   ```
+   or
+   ```sh
+   make down
+   ```
+
