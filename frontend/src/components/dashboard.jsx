@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import boy from "../images/boy.png";
 
+
 const Dashboard = () => {
   const getTodoToken = () => {
     return document.cookie
@@ -9,6 +10,7 @@ const Dashboard = () => {
       .find((row) => row.startsWith("todoToken="))
       ?.split("=")[1];
   };
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [task, setTask] = useState("");
   const [completed, setCompleted] = useState(false);
@@ -23,7 +25,7 @@ const Dashboard = () => {
     const todoToken = getTodoToken();
 
     const response = await axios.post(
-      "http://localhost:8000/api/task/",
+      `${backendUrl}/api/task/`,
       { task: task },
       {
         headers: {
@@ -34,7 +36,6 @@ const Dashboard = () => {
     );
     if (response.status === 200) {
       setTask("");
-      console.log("Task added successfully");
       window.location.reload();
     }
   };
@@ -42,7 +43,7 @@ const Dashboard = () => {
     const todoToken = getTodoToken();
     setCompleted(!completed);
     const response = await axios.put(
-      `http://localhost:8000/api/task/${id}/`,
+      `${backendUrl}/api/task/${id}`,
       { completed: !completed },
       {
         headers: {
@@ -51,6 +52,7 @@ const Dashboard = () => {
         },
       }
     );
+    console.log(response);
     if (response.status === 200) {
       console.log("Task updated successfully");
       window.location.reload();
@@ -58,12 +60,8 @@ const Dashboard = () => {
   };
 
   const fetchTasks = async () => {
-    const todoToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="))
-      ?.split("=")[1];
-
-    const response = await axios.get("http://localhost:8000/api/task/", {
+    const todoToken = getTodoToken();
+    const response = await axios.get(`${backendUrl}/api/task/`, {
       headers: {
         Authorization: `Bearer ${todoToken}`,
         "Content-Type": "application/json",
@@ -90,7 +88,7 @@ const Dashboard = () => {
   const handleDelete = async (taskId) => {
     const todoToken = getTodoToken();
     const response = await axios.delete(
-      `http://localhost:8000/api/task/${taskId}/`,
+      `${backendUrl}/api/task/${taskId}`,
       {
         headers: {
           Authorization: `Bearer ${todoToken}`,
@@ -99,7 +97,6 @@ const Dashboard = () => {
       }
     );
     if (response.status === 200) {
-      console.log("Task deleted successfully");
       window.location.reload();
     }
   };
@@ -109,7 +106,7 @@ const Dashboard = () => {
     console.log(todoToken);
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/archive/${taskId}`,
+        `${backendUrl}/api/archive/${taskId}`,
         {},
         {
           headers: {
@@ -144,7 +141,7 @@ const Dashboard = () => {
       {/* Main content */}
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-blue-500 rounded-lg">
+          <div className="  bg-indigo-600 rounded-lg">
             <h2 className="p-2 text-3xl font-bold mb-6 text-black">Tasks</h2>
           </div>
 
@@ -160,14 +157,14 @@ const Dashboard = () => {
                 placeholder="Enter your task"
                 value={task}
                 onChange={(e) => setTask(e.target.value)}
-                onKeyPress={(e) => {
+                onKeyUp={(e) => {
                   if (e.key === "Enter" && task.trim() !== "") {
                     addTask();
                   }
                 }}
               />
               <button
-                className="bg-gradient-to-r from-blue-300 to-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-r-lg transition duration-150 ease-in-out"
+                className="bg-gradient-to-r  bg-indigo-600 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-r-lg transition duration-150 ease-in-out"
                 onClick={addTask}
               >
                 Add Task

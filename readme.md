@@ -1,6 +1,6 @@
 # Todo App
 
-This is a simple Todo App built with React for the frontend and FastAPI for the backend. The app allows users to add, update, and delete tasks.
+TaskMe is a comprehensive task management application that leverages FastAPI for the backend and React for the frontend. The app is designed to help users efficiently manage their tasks by allowing them to add, archive, and delete tasks. TaskMe also utilizes Nginx for serving the application and Tailwind CSS for styling, ensuring a seamless and visually appealing user experience.
 
 ## Running the App with Docker Compose
 
@@ -24,8 +24,12 @@ To run the Todo App using Docker Compose, follow these steps:
    ```sh
    docker-compose up --build
    ```
+   or
+   ```sh
+   make run
+   ```
 
-4. Open your browser and navigate to `http://localhost:3000` to access the Todo App.
+4. Open your browser and navigate to `http://localhost:4000` to access the Todo App.
 
 ### Stopping the App
 

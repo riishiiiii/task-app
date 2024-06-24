@@ -12,7 +12,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-gradient-to-b from-blue-600 to-blue-800 border-r border-blue-200 h-screen p-6 flex flex-col shadow-lg">
+    <div className="w-64  bg-indigo-600 border-r border-blue-200 h-screen p-6 flex flex-col shadow-lg">
     <div>
       <div className="flex items-center mb-8">
         <svg
