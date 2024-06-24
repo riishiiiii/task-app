@@ -6,10 +6,16 @@ import uuid
 from passlib.hash import bcrypt
 from sqlalchemy.exc import IntegrityError
 from .jwtservice import validate_user
+import re
 
 
 class UserAlreadyExists(Exception):
     def __init__(self, message: str = "User already exists"):
+        self.message = message
+
+
+class UserNotFound(Exception):
+    def __init__(self, message: str = "User not found"):
         self.message = message
 
 
@@ -19,6 +25,13 @@ class AuthService:
 
     async def register_user(self, username: str, email: str, password: str) -> dict:
         try:
+            if not isinstance(username, str) or not username.strip():
+                raise ValueError("Username must be a non-empty string.")
+            email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+            if not re.match(email_pattern, email):
+                raise ValueError("Invalid email format.")
+            if not password:
+                raise ValueError("Password cannot be empty.")
             user_to_create = models.User(
                 user_id=uuid.uuid4(),
                 username=username,
@@ -28,7 +41,7 @@ class AuthService:
             self.db.add(user_to_create)
             self.db.commit()
             self.db.refresh(user_to_create)
-            return {"message": "User created successfully"}
+            return user_to_create
         except IntegrityError:
             self.db.rollback()
             raise UserAlreadyExists()
@@ -38,3 +51,14 @@ class AuthService:
 
     async def login_user(self, username: str, password: str) -> dict:
         return validate_user(self.db, username, password)
+
+    async def delete_user_by_email(self, email: str) -> None:
+        user = self.db.query(models.User).filter(models.User.email == email).first()
+        if not user:
+            raise UserNotFound()
+        self.db.delete(user)
+        self.db.commit()
+
+    async def check_user_exists(self, email: str) -> bool:
+        user = self.db.query(models.User).filter(models.User.email == email).first()
+        return bool(user)
