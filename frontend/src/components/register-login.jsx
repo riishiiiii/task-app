@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import boy2 from "../images/boy.png";
+import logo from "../logos/png/logo-black.png";
+import Popup from "./popup";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("");
+
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     const todoToken = document.cookie
@@ -24,14 +28,46 @@ const RegisterLogin = () => {
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+
   const handleRegister = async () => {
+    const passwordValidator = (password) => {
+      const minLength = 8;
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+      return (
+        password.length >= minLength &&
+        hasUpperCase &&
+        hasLowerCase &&
+        hasNumber &&
+        hasSpecialChar
+      );
+    };
+
+    if (!passwordValidator(registerPassword)) {
+      setShowPopup(true);
+      setPopupType("error");
+      setTimeout(() => setShowPopup(false), 3000);
+      setPopupMessage(
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+      );
+      return;
+    }
+
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/register",
+        `${backendUrl}/api/auth/register`,
         {
           username: registerUsername,
           email: registerEmail,
           password: registerPassword,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
         }
       );
       if (response.status === 200) {
@@ -45,18 +81,23 @@ const RegisterLogin = () => {
       }
     } catch (error) {
       setShowPopup(true);
+      setPopupType("error");
       setTimeout(() => setShowPopup(false), 3000);
       setPopupMessage(error.response.data.detail);
     }
   };
-
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        `${backendUrl}/api/auth/login`,
         {
           username: loginUsername,
           password: loginPassword,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
         }
       );
       if (response.status === 200) {
@@ -71,20 +112,34 @@ const RegisterLogin = () => {
   };
 
   return (
-    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: `url(${boy2})` }}>
-      {showPopup && (
-        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 ${popupType === "success" ? "bg-green-500" : "bg-red-500"} text-white px-6 py-3 rounded-lg shadow-2xl z-50 transition-all duration-300 ease-in-out`}>
-          {popupMessage}
-        </div>
-      )}
+    <div
+      className="flex h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${boy2})` }}
+    >
+      <Popup
+        showPopup={showPopup}
+        popupMessage={popupMessage}
+        popupType={popupType}
+        setShowPopup={setShowPopup}
+      />
       <div className="m-auto bg-white  rounded-2xl border border-gray-200 shadow-2xl flex w-3/4 max-w-4xl flex-col items-center p-6">
-        <h1 className="text-4xl font-bold text-indigo-800 mb-6">Let's Plan Your Task!</h1>
+        <div className="flex items-center mb-6">
+          <img src={logo} alt="Logo" className="w-32 h-32 mr-4" />
+          <h1 className="text-4xl font-bold text-indigo-800">
+            Let's Plan Your Task!
+          </h1>
+        </div>
         <div className="w-full flex flex-row">
           <div className="w-1/2 p-12">
-            <h2 className="text-3xl font-bold text-indigo-800 mb-8">Register</h2>
+            <h2 className="text-3xl font-bold text-indigo-800 mb-8">
+              Register
+            </h2>
             <form id="register-form" className="space-y-6">
               <div>
-                <label className="text-sm font-semibold text-gray-600 block" htmlFor="register-username">
+                <label
+                  className="text-sm font-semibold text-gray-600 block"
+                  htmlFor="register-username"
+                >
                   Username
                 </label>
                 <input
@@ -97,7 +152,10 @@ const RegisterLogin = () => {
                 />
               </div>
               <div>
-                <label className="text-sm font-semibold text-gray-600 block" htmlFor="register-email">
+                <label
+                  className="text-sm font-semibold text-gray-600 block"
+                  htmlFor="register-email"
+                >
                   Email
                 </label>
                 <input
@@ -110,7 +168,10 @@ const RegisterLogin = () => {
                 />
               </div>
               <div>
-                <label className="text-sm font-semibold text-gray-600 block" htmlFor="register-password">
+                <label
+                  className="text-sm font-semibold text-gray-600 block"
+                  htmlFor="register-password"
+                >
                   Password
                 </label>
                 <input
@@ -120,6 +181,13 @@ const RegisterLogin = () => {
                   placeholder="Enter your password"
                   value={registerPassword}
                   onChange={(e) => setRegisterPassword(e.target.value)}
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  title="Password must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      handleRegister();
+                    }
+                  }}
                 />
               </div>
               <button
@@ -135,7 +203,10 @@ const RegisterLogin = () => {
             <h2 className="text-3xl font-bold mb-8">Welcome Back!</h2>
             <form id="login-form" className="w-full space-y-6">
               <div>
-                <label className="text-sm font-semibold block" htmlFor="login-username">
+                <label
+                  className="text-sm font-semibold block"
+                  htmlFor="login-username"
+                >
                   Username
                 </label>
                 <input
@@ -148,7 +219,10 @@ const RegisterLogin = () => {
                 />
               </div>
               <div>
-                <label className="text-sm font-semibold block" htmlFor="login-password">
+                <label
+                  className="text-sm font-semibold block"
+                  htmlFor="login-password"
+                >
                   Password
                 </label>
                 <input
@@ -158,6 +232,11 @@ const RegisterLogin = () => {
                   placeholder="Enter your password"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      handleLogin();
+                    }
+                  }}
                 />
               </div>
               <button

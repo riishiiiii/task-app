@@ -10,6 +10,8 @@ const Archive = () => {
     fetchArchivedTasks();
   }, []);
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   const getTodoToken = () => {
     return document.cookie
       .split("; ")
@@ -19,7 +21,7 @@ const Archive = () => {
   const fetchArchivedTasks = async () => {
     const todoToken = getTodoToken();
     try {
-      const response = await axios.get("http://localhost:8000/api/archive/", {
+      const response = await axios.get(`${backendUrl}/api/archive/`, {
         headers: {
           Authorization: `Bearer ${todoToken}`,
           "Content-Type": "application/json",
@@ -50,7 +52,7 @@ const Archive = () => {
     const todoToken = getTodoToken();
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/archive/${taskId}`,
+        `${backendUrl}/api/archive/${taskId}`,
         {
           headers: {
             Authorization: `Bearer ${todoToken}`,
@@ -67,30 +69,33 @@ const Archive = () => {
     }
   };
 
-  const handleRestore = (taskId) => {
-    // Implement restore functionality
-    console.log("Restore archived task", taskId);
-  };
-
   return (
-    <div className="flex h-screen bg-cover bg-center" style={{ backgroundImage: `url(${boy})` }}>
+    <div
+      className="flex h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${boy})` }}
+    >
       <div className="flex-1 p-10">
         <div className="max-w-4xl mx-auto">
-            <div className=" rounded-lg  bg-blue-500">
+          <div className=" rounded-lg   bg-indigo-600">
             <h2 className="p-2  text-3xl font-bold mb-6 text-black">Archive</h2>
-            </div>
+          </div>
           {Object.keys(archivedTasksPerDay).length === 0 ? (
             <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <p className="text-gray-500 text-lg">No archived tasks found.</p>
             </div>
           ) : (
             Object.entries(archivedTasksPerDay).map(([day, tasks]) => (
-              <div key={day} className="bg-white border border-gray-200 shadow-lg rounded-lg p-6 mb-6">
+              <div
+                key={day}
+                className="bg-white border border-gray-200 shadow-lg rounded-lg p-6 mb-6"
+              >
                 <h3 className="text-xl font-semibold mb-4 text-gray-700 capitalize">
                   {day}
                 </h3>
                 {tasks.length === 0 ? (
-                  <p className="text-gray-500">No archived tasks for this day.</p>
+                  <p className="text-gray-500">
+                    No archived tasks for this day.
+                  </p>
                 ) : (
                   <ul className="space-y-3">
                     {tasks.map((task) => (
@@ -165,4 +170,3 @@ const Archive = () => {
 };
 
 export default Archive;
-
