@@ -10,8 +10,7 @@ const Dashboard = () => {
       .find((row) => row.startsWith("todoToken="))
       ?.split("=")[1];
   };
-  // const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const backendUrl = "https://bcaa-120-72-93-46.ngrok-free.app";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [task, setTask] = useState("");
   const [completed, setCompleted] = useState(false);
