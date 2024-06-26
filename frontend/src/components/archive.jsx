@@ -10,7 +10,8 @@ const Archive = () => {
     fetchArchivedTasks();
   }, []);
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  // const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const backendUrl = "https://bcaa-120-72-93-46.ngrok-free.app";
 
   const getTodoToken = () => {
     return document.cookie
@@ -61,8 +62,7 @@ const Archive = () => {
         }
       );
       if (response.status === 200) {
-        console.log("Task deleted successfully");
-        window.location.reload();
+        fetchArchivedTasks()
       }
     } catch (error) {
       console.error("Error deleting task:", error);

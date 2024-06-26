@@ -11,7 +11,8 @@ const RegisterLogin = () => {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("");
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  // const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const backendUrl = "https://bcaa-120-72-93-46.ngrok-free.app";
 
   useEffect(() => {
     const todoToken = document.cookie

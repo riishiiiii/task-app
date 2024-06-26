@@ -13,7 +13,6 @@ from sqlalchemy.exc import NoResultFound
 class TestAuthService:
     @pytest.mark.asyncio
     async def test_should_register_user(self, database):
-        print(database)
         async with AuthServiceTestDriver(database) as driver:
             username, email, password = unique_user_data("user")
             user = await driver.register_user(username, email, password)

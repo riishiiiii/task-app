@@ -10,11 +10,12 @@ const Dashboard = () => {
       .find((row) => row.startsWith("todoToken="))
       ?.split("=")[1];
   };
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  // const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const backendUrl = "https://bcaa-120-72-93-46.ngrok-free.app";
 
   const [task, setTask] = useState("");
   const [completed, setCompleted] = useState(false);
-  const [tasksPerDay, setTasksPerDay] = useState({});
+  const [tasksPerDay, setTasksPerDay] = useState([]);
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
@@ -41,10 +42,19 @@ const Dashboard = () => {
       }
     );
     if (response.status === 200) {
-      setTask("");
-      window.location.reload();
+      setTask(''); // Clear the input field
+      setTasksPerDay((prevTasks) => {
+        const newTasks = { today: [], ...prevTasks };
+        if (!newTasks.today.length) {
+          newTasks.today = [response.data];
+        } else {
+          newTasks.today = [response.data, ...newTasks.today];
+        }
+        return newTasks;
+      });
     }
   };
+
   const updateTask = async (id) => {
     const todoToken = getTodoToken();
     setCompleted(!completed);
@@ -58,9 +68,8 @@ const Dashboard = () => {
         },
       }
     );
-
     if (response.status === 200) {
-      window.location.reload();
+      fetchTasks();
     }
   };
 
@@ -98,7 +107,7 @@ const Dashboard = () => {
       },
     });
     if (response.status === 200) {
-      window.location.reload();
+      fetchTasks();
     }
   };
 
@@ -116,7 +125,7 @@ const Dashboard = () => {
         }
       );
       if (response.status === 200) {
-        window.location.reload();
+        fetchTasks();
       }
     } catch (error) {
       if (error.response && error.response.status === 403) {
@@ -138,9 +147,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    // <div className="flex h-screen bg-gradient-to-l from-white to-gray-200">
     <div
-      className="flex h-screen bg-cover bg-center"
+      className="flex flex-col md:flex-row h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${boy})`, filter: "blue(1)" }}
     >
       <Popup
@@ -150,20 +158,22 @@ const Dashboard = () => {
         setShowPopup={setShowPopup}
       />
       {/* Main content */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-4 md:p-10">
         <div className="max-w-4xl mx-auto">
-          <div className="  bg-indigo-600 rounded-lg">
-            <h2 className="p-2 text-3xl font-bold mb-6 text-black">Tasks</h2>
+          <div className="bg-indigo-600 rounded-lg">
+            <h2 className="p-2 text-2xl md:text-3xl font-bold mb-6 text-black">
+              Tasks
+            </h2>
           </div>
 
           {/* Add Task Section */}
-          <div className="bg-white rounded-lg shadow-md mb-8 p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-700">
+          <div className="bg-white rounded-lg shadow-md mb-8 p-4 md:p-6">
+            <h3 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
               Add New Task
             </h3>
-            <div className="flex">
+            <div className="flex flex-col md:flex-row">
               <input
-                className="flex-grow shadow-sm border border-gray-300 rounded-l-lg py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent"
+                className="flex-grow shadow-sm border border-gray-300 rounded-t-lg md:rounded-l-lg md:rounded-t-none py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent"
                 type="text"
                 placeholder="Enter your task"
                 value={task}
@@ -175,7 +185,7 @@ const Dashboard = () => {
                 }}
               />
               <button
-                className="bg-gradient-to-r  bg-indigo-600 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-r-lg transition duration-150 ease-in-out"
+                className="bg-gradient-to-r bg-indigo-600 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-b-lg md:rounded-r-lg md:rounded-b-none transition duration-150 ease-in-out"
                 onClick={addTask}
               >
                 Add Task
@@ -194,9 +204,9 @@ const Dashboard = () => {
             Object.entries(tasksPerDay).map(([day, tasks]) => (
               <div
                 key={day}
-                className="bg-white border border-gray-200 shadow-lg rounded-lg p-6 mb-6"
+                className="bg-white border border-gray-200 shadow-lg rounded-lg p-4 md:p-6 mb-6"
               >
-                <h3 className="text-xl font-semibold mb-4 text-gray-700 capitalize">
+                <h3 className="text-lg md:text-xl font-semibold mb-4 text-gray-700 capitalize">
                   {day}
                 </h3>
                 {tasks.length === 0 ? (
@@ -206,7 +216,7 @@ const Dashboard = () => {
                     {tasks.map((task) => (
                       <li
                         key={task.task_id}
-                        className="flex items-center justify-between bg-gray-50 p-3 rounded-lg"
+                        className="flex flex-col md:flex-row items-center justify-between bg-gray-50 p-3 rounded-lg"
                       >
                         <div className="flex items-center flex-grow">
                           <input

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from api.auth import router as auth_router
 from api.task import router as task_router
+from api.project import router as project_router
 from fastapi.middleware.cors import CORSMiddleware
 from api.archivetask import router as archive_task_router
 
@@ -20,6 +21,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 app.include_router(task_router, prefix="/api/task", tags=["task"])
 app.include_router(archive_task_router, prefix="/api/archive", tags=["archive"])
+app.include_router(project_router, prefix="/api/project", tags=["project"])
 
 if __name__ == "__main__":
     import uvicorn

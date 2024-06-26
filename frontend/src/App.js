@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "./components/dashboard";
 import Archive from "./components/archive";
 import Layout from "./components/layout";
+import Projects from "./components/projects";
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
           element={
             <Layout>
               <Archive />
+            </Layout>
+          }
+        />
+        <Route
+          path="/projects"
+          element={
+            <Layout>
+              <Projects />
             </Layout>
           }
         />
