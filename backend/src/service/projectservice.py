@@ -87,3 +87,16 @@ class ProjectService:
         except Exception as e:
             self.db.rollback()
             raise e
+
+    async def update_project(
+        self, project_id: uuid.UUID, project: CreateProject
+    ) -> None:
+        project_to_update = (
+            self.db.query(models.Project)
+            .filter(models.Project.project_id == project_id)
+            .first()
+        )
+        if project_to_update is None:
+            raise ProjectNotFound()
+        project_to_update.project_name = project.project_name
+        self.db.commit()

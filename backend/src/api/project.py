@@ -46,3 +46,13 @@ async def delete_project(
         return {"message": "Project deleted successfully"}
     except ProjectNotFound:
         raise HTTPException(status_code=404, detail="Project not found")
+
+
+@router.put("/{project_id}", dependencies=[Depends(JWTBearerService())])
+async def update_project(
+    project_id: UUID,
+    project: CreateProject,
+    service: ProjectService = Depends(ProjectService),
+) -> dict:
+    await service.update_project(project_id, project)
+    return {"message": "Project updated successfully"}
