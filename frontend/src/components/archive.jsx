@@ -61,8 +61,7 @@ const Archive = () => {
         }
       );
       if (response.status === 200) {
-        console.log("Task deleted successfully");
-        window.location.reload();
+        fetchArchivedTasks()
       }
     } catch (error) {
       console.error("Error deleting task:", error);

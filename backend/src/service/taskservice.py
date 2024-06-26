@@ -6,6 +6,7 @@ from schemas.task import CreateTask, SingleTask, UpdateTask, AllTasks
 import uuid
 from datetime import datetime, timezone
 from collections import defaultdict
+from service.authservice import UserNotFound
 
 
 class TaskNotFound(Exception):
@@ -35,9 +36,15 @@ class TaskService:
 
     async def get_task_by_id(self, task_id: uuid.UUID) -> SingleTask:
         task = self.db.query(models.Task).filter(models.Task.task_id == task_id).first()
-        return SingleTask(**task)
+        if task is None:
+            raise TaskNotFound(f"Task not found")
+        return SingleTask.from_orm(task)
 
     async def get_task_by_user_id(self, user_id: uuid.UUID) -> AllTasks:
+        user = self.db.query(models.User).filter(models.User.user_id == user_id).first()
+        if user is None:
+            raise UserNotFound(f"User not found")
+
         tasks = (
             self.db.query(models.Task)
             .filter(models.Task.user_id == user_id)
