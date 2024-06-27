@@ -1,6 +1,6 @@
 // components/Layout.jsx
 import React from "react";
-import Sidebar from "./sidebar";
+import Sidebar from "./sidebar/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 

@@ -1,7 +1,7 @@
 // pages/Archive.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import boy from "../images/boy.png";
+import boy from "../../images/boy.png";
 
 const Archive = () => {
   const [archivedTasksPerDay, setArchivedTasksPerDay] = useState({});
