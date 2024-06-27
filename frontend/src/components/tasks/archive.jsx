@@ -1,7 +1,7 @@
 // pages/Archive.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import boy from "../images/boy.png";
+import boy from "../../images/boy.png";
 
 const Archive = () => {
   const [archivedTasksPerDay, setArchivedTasksPerDay] = useState({});
@@ -61,7 +61,7 @@ const Archive = () => {
         }
       );
       if (response.status === 200) {
-        fetchArchivedTasks()
+        fetchArchivedTasks();
       }
     } catch (error) {
       console.error("Error deleting task:", error);

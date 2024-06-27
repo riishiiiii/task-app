@@ -1,9 +1,10 @@
-import RegisterLogin from "./components/register-login";
+import RegisterLogin from "./components/auth/register-login";
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./components/dashboard";
-import Archive from "./components/archive";
+import Dashboard from "./components/tasks/dashboard";
+import Archive from "./components/tasks/archive";
 import Layout from "./components/layout";
-import Projects from "./components/projects";
+import ProjectList from "./components/project/projectsList";
+import Project from "./components/project/project";
 
 function App() {
   return (
@@ -30,7 +31,15 @@ function App() {
           path="/projects"
           element={
             <Layout>
-              <Projects />
+              <ProjectList />
+            </Layout>
+          }
+        />
+        <Route
+          path="/project/:projectId"
+          element={
+            <Layout>
+              <Project />
             </Layout>
           }
         />

@@ -43,13 +43,16 @@ class ProjectService:
     async def get_projects(self, user: models.User) -> list[SingleProject]:
         projects = (
             self.db.query(models.Project)
-            .join(models.ProjectMembers, models.Project.project_id == models.ProjectMembers.project_id)
+            .join(
+                models.ProjectMembers,
+                models.Project.project_id == models.ProjectMembers.project_id,
+            )
             .filter(models.ProjectMembers.user_id == user.user_id)
             .all()
         )
 
         return [SingleProject.from_orm(project) for project in projects]
-    
+
     async def get_project_by_project_id(self, project_id: uuid.UUID) -> SingleProject:
         project = (
             self.db.query(models.Project)
@@ -68,9 +71,32 @@ class ProjectService:
         )
         if project is None:
             raise ProjectNotFound()
+
+        project_members = (
+            self.db.query(models.ProjectMembers)
+            .filter(models.ProjectMembers.project_id == project_id)
+            .all()
+        )
         try:
+            for member in project_members:
+                self.db.delete(member)
+            self.db.commit()
+
             self.db.delete(project)
             self.db.commit()
         except Exception as e:
             self.db.rollback()
             raise e
+
+    async def update_project(
+        self, project_id: uuid.UUID, project: CreateProject
+    ) -> None:
+        project_to_update = (
+            self.db.query(models.Project)
+            .filter(models.Project.project_id == project_id)
+            .first()
+        )
+        if project_to_update is None:
+            raise ProjectNotFound()
+        project_to_update.project_name = project.project_name
+        self.db.commit()

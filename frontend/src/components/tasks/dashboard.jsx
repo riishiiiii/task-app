@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import boy from "../images/boy.png";
-import Popup from "./popup";
+import boy from "../../images/boy.png";
+import Popup from "../popup";
 
 const Dashboard = () => {
   const getTodoToken = () => {
@@ -41,7 +41,7 @@ const Dashboard = () => {
       }
     );
     if (response.status === 200) {
-      setTask(''); // Clear the input field
+      setTask(""); // Clear the input field
       setTasksPerDay((prevTasks) => {
         const newTasks = { today: [], ...prevTasks };
         if (!newTasks.today.length) {
