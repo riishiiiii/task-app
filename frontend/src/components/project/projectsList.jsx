@@ -5,7 +5,7 @@ import boy from "../../images/boy.png";
 import AddProjectForm from "./addProjectForm";
 import ProjectCard from "./projectCard";
 
-const Projects = () => {
+const ProjectList = () => {
   const getTodoToken = () => {
     return document.cookie
       .split("; ")
@@ -37,17 +37,15 @@ const Projects = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center p-8 relative"
-      style={{
-        backgroundImage: `url(${boy})`,
-      }}
+      className="flex h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${boy})` }}
     >
       <button
-        className="absolute top-9 right-9 bg-blue-500 text-white px-5 py-3 rounded hover:bg-blue-600 transition-colors flex items-center"
+        className="absolute top-4 sm:top-9 right-4 sm:right-9 bg-white text-black px-3 sm:px-5 py-2 sm:py-3 rounded hover:bg-gray-200 transition-colors flex items-center"
         onClick={handleAddProject}
       >
         <svg
-          className="w-6 h-6 mr-2"
+          className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -71,8 +69,8 @@ const Projects = () => {
         </div>
       )}
 
-      <div className="container mx-auto mt-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="container mx-auto mt-10 sm:mt-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -86,4 +84,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default ProjectList;

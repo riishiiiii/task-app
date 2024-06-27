@@ -82,8 +82,19 @@ const ProjectCard = ({ project, fetchProjects }) => {
     setEditText(project.project_name);
   };
 
+  const changeCursor = (cursor) => {
+    document.documentElement.style.cursor = cursor;
+  };
+
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 transition-all duration-300 hover:shadow-xl relative">
+    <div
+      className="bg-white shadow-lg rounded-xl p-6 transition-all duration-300 hover:shadow-xl relative cursor-pointer"
+      onClick={() => {
+        setIsMenuOpen(false);
+        window.location.href = `/project/${project.project_id}`;
+      }}
+      onMouseEnter={() => changeCursor("pointer")}
+    >
       {!project || Object.keys(project).length === 0 ? (
         <div className="text-center">
           <h1 className="text-gray-500 mb-4">No project exists. Create one.</h1>
@@ -105,7 +116,10 @@ const ProjectCard = ({ project, fetchProjects }) => {
           </div>
           <div className="absolute top-4 right-4">
             <button
-              onClick={toggleMenu}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMenu(e);
+              }}
               className="text-gray-500 hover:text-gray-700 focus:outline-none"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -116,7 +130,10 @@ const ProjectCard = ({ project, fetchProjects }) => {
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 <button
                   className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  onClick={handleEditClick}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditClick(e);
+                  }}
                 >
                   Edit
                 </button>
@@ -125,7 +142,10 @@ const ProjectCard = ({ project, fetchProjects }) => {
                 </button>
                 <button
                   className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
-                  onClick={handleDeleteClick}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteClick(e);
+                  }}
                 >
                   Delete
                 </button>
@@ -192,5 +212,4 @@ const ProjectCard = ({ project, fetchProjects }) => {
     </div>
   );
 };
-
 export default ProjectCard;

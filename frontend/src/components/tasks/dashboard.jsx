@@ -41,7 +41,7 @@ const Dashboard = () => {
       }
     );
     if (response.status === 200) {
-      setTask(''); // Clear the input field
+      setTask(""); // Clear the input field
       setTasksPerDay((prevTasks) => {
         const newTasks = { today: [], ...prevTasks };
         if (!newTasks.today.length) {

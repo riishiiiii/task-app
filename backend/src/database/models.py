@@ -73,6 +73,10 @@ class ProjectLabels(Base):
     __tablename__ = "project_labels"
     label_id = Column(UUID(as_uuid=True), primary_key=True)
     label = Column(String(100))
+    project_id = Column(
+        UUID(as_uuid=True), ForeignKey("projects.project_id", ondelete="CASCADE")
+    )
+    project = relationship("Project")
 
 
 class ProjectTask(Base):

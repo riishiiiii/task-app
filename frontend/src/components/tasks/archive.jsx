@@ -61,7 +61,7 @@ const Archive = () => {
         }
       );
       if (response.status === 200) {
-        fetchArchivedTasks()
+        fetchArchivedTasks();
       }
     } catch (error) {
       console.error("Error deleting task:", error);

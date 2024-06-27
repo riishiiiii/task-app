@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
     }
   }, [navigate]);
   return (
-    <div className="flex h-screen border-t border-gray-200 bg-gray-300">
+    <div className="flex h-screen bg-white">
       <Sidebar />
       <div className="flex-1 overflow-auto">{children}</div>
     </div>

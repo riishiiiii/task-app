@@ -23,13 +23,10 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="relative">
-      <button
-        onClick={handleSidebarToggle}
-        className="md:hidden p-4 focus:outline-none"
-      >
+    <div className="relative z-10">
+      <button onClick={handleSidebarToggle} className="p-4 focus:outline-none">
         <svg
-          className="w-6 h-6 text-white"
+          className="w-6 h-6 text-black"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -46,12 +43,12 @@ const Sidebar = () => {
       <div
         className={`fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out w-64 bg-indigo-600 border-r border-blue-200 h-screen p-6 flex flex-col shadow-lg`}
+        } transition-transform duration-300 ease-in-out w-64 bg-white border-r border-blue-00 h-screen p-6 flex flex-col shadow-lg`}
       >
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center">
             <svg
-              className="w-10 h-10 mr-3 text-white"
+              className="w-10 h-10 mr-3 text-black"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -64,16 +61,16 @@ const Sidebar = () => {
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
               ></path>
             </svg>
-            <h1 className="text-3xl font-extrabold text-white tracking-wider">
+            <h1 className="text-2xl font-extrabold text-black tracking-wider">
               TASKME
             </h1>
           </div>
           <button
             onClick={handleSidebarToggle}
-            className="md:hidden p-4 focus:outline-none"
+            className="p-4 focus:outline-none"
           >
             <svg
-              className="w-6 h-6 text-white"
+              className="w-6 h-6 ml-4 text-black"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -101,7 +98,7 @@ const Sidebar = () => {
                   <li className="group">
                     <Link
                       to="/dashboard"
-                      className={`flex items-center text-gray-100 text-lg group-hover:text-white transition duration-300 ease-in-out ${
+                      className={`flex items-center text-black text-sm group-hover:text-black transition duration-300 ease-in-out ${
                         location.pathname === "/dashboard" ? "font-bold" : ""
                       }`}
                     >
@@ -111,7 +108,7 @@ const Sidebar = () => {
                   <li className="group">
                     <Link
                       to="/archive"
-                      className={`flex items-center text-gray-100 text-lg group-hover:text-white transition duration-300 ease-in-out ${
+                      className={`flex items-center text-black text-sm group-hover:text-black transition duration-300 ease-in-out ${
                         location.pathname === "/archive" ? "font-bold" : ""
                       }`}
                     >
@@ -124,7 +121,7 @@ const Sidebar = () => {
             <li className="group">
               <Link
                 to="/projects"
-                className={`flex items-center text-gray-100 text-lg group-hover:text-white transition duration-300 ease-in-out ${
+                className={`flex items-center text-black text-lg group-hover:text-black transition duration-300 ease-in-out ${
                   location.pathname === "/projects" ? "font-bold" : ""
                 }`}
               >
