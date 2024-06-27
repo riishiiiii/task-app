@@ -53,20 +53,11 @@ class AuthService:
         return validate_user(self.db, username, password)
 
     async def delete_user_by_email(self, email: str) -> None:
-        try:
-            user = (
-                self.db.query(models.User)
-                .filter(models.User.email == email)
-                .with_for_update()
-                .first()
-            )
-            if not user:
-                raise UserNotFound()
-            self.db.delete(user)
-            self.db.commit()
-        except Exception as e:
-            self.db.rollback()
-            raise e
+        user = self.db.query(models.User).filter(models.User.email == email).first()
+        if not user:
+            raise UserNotFound()
+        self.db.delete(user)
+        self.db.commit()
 
     async def check_user_exists(self, email: str) -> bool:
         user = self.db.query(models.User).filter(models.User.email == email).first()

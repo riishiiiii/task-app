@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import boy2 from "../../images/boy.png";
-import logo from "../../logos/png/logo-black.png";
-import Popup from "../popup";
+import boy2 from "../images/boy.png";
+import logo from "../logos/png/logo-black.png";
+import Popup from "./popup";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
