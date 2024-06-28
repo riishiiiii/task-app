@@ -1,19 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { backendUrl, getTodoToken } from "../../helpers";
 
 const ProjectCard = ({ project, fetchProjects }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [editText, setEditText] = useState("");
-
-  const getTodoToken = () => {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="))
-      ?.split("=")[1];
-  };
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const deleteProject = async (project_id) => {
     const token = getTodoToken();
@@ -155,7 +148,13 @@ const ProjectCard = ({ project, fetchProjects }) => {
         </>
       )}
       {showConfirmDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowConfirmDelete(false);
+          }}
+        >
           <div className="bg-white p-6 rounded-lg shadow-xl">
             <h3 className="text-lg font-bold mb-4">Confirm Deletion</h3>
             <p className="mb-4">
@@ -164,13 +163,17 @@ const ProjectCard = ({ project, fetchProjects }) => {
             <div className="flex justify-end space-x-4">
               <button
                 className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                onClick={() => setShowConfirmDelete(false)}
+                onClick={(e) => {
+                  setShowConfirmDelete(false);
+                }}
               >
                 Cancel
               </button>
               <button
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={confirmDelete}
+                onClick={(e) => {
+                  confirmDelete();
+                }}
               >
                 Delete
               </button>
@@ -179,7 +182,12 @@ const ProjectCard = ({ project, fetchProjects }) => {
         </div>
       )}
       {showEdit && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <div className="bg-white p-6 rounded-lg shadow-xl">
             <h3 className="text-lg font-bold mb-4">Edit Project</h3>
             <form onSubmit={handleEditSubmit}>
@@ -200,7 +208,10 @@ const ProjectCard = ({ project, fetchProjects }) => {
                 </button>
                 <button
                   className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                  onClick={() => setShowEdit(false)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowEdit(false);
+                  }}
                 >
                   Cancel
                 </button>

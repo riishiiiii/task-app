@@ -5,6 +5,7 @@ import Archive from "./components/tasks/archive";
 import Layout from "./components/layout";
 import ProjectList from "./components/project/projectsList";
 import Project from "./components/project/project";
+import NotFoundPage from "./components/nopagefound";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           }
         />
       </Routes>
+      <NotFoundPage />
     </>
   );
 }

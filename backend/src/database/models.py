@@ -6,6 +6,7 @@ from sqlalchemy import (
     DateTime,
     Integer,
     PrimaryKeyConstraint,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.dialects.postgresql import UUID
@@ -77,6 +78,7 @@ class ProjectLabels(Base):
         UUID(as_uuid=True), ForeignKey("projects.project_id", ondelete="CASCADE")
     )
     project = relationship("Project")
+    __table_args__ = (UniqueConstraint("label", "project_id"),)
 
 
 class ProjectTask(Base):

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import boy2 from "../../images/boy.png";
 import logo from "../../logos/png/logo-black.png";
 import Popup from "../popup";
+import { backendUrl, getTodoToken } from "../../helpers";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
@@ -11,12 +12,9 @@ const RegisterLogin = () => {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("");
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    const todoToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="));
+    const todoToken = getTodoToken();
     if (todoToken) {
       navigate("/dashboard");
     }

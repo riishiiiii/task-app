@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import boy from "../../images/boy.png";
+import { backendUrl, getTodoToken } from "../../helpers";
 
 const Archive = () => {
   const [archivedTasksPerDay, setArchivedTasksPerDay] = useState({});
@@ -10,14 +11,7 @@ const Archive = () => {
     fetchArchivedTasks();
   }, []);
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  const getTodoToken = () => {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="))
-      ?.split("=")[1];
-  };
   const fetchArchivedTasks = async () => {
     const todoToken = getTodoToken();
     try {

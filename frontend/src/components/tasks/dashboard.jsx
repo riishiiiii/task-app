@@ -2,15 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import boy from "../../images/boy.png";
 import Popup from "../popup";
+import { backendUrl, getTodoToken } from "../../helpers";
 
 const Dashboard = () => {
-  const getTodoToken = () => {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="))
-      ?.split("=")[1];
-  };
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
 
   const [task, setTask] = useState("");
   const [completed, setCompleted] = useState(false);
