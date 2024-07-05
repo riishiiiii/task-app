@@ -1,10 +1,17 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from database.database import get_db
-from schemas.project import CreateProject, SingleProject
+from schemas.project import (
+    CreateProject,
+    SingleProject,
+    CreateProjectLabel,
+    SingleProjectLabel,
+    ProjectLabels,
+)
 from database import models
 from datetime import datetime, timezone
 import uuid
+from sqlalchemy.exc import IntegrityError
 
 
 class ProjectNotFound(Exception):
@@ -100,3 +107,11 @@ class ProjectService:
             raise ProjectNotFound()
         project_to_update.project_name = project.project_name
         self.db.commit()
+
+    def check_if_project_exists(self, project_id: uuid.UUID) -> models.Project | bool:
+        project = (
+            self.db.query(models.Project)
+            .filter(models.Project.project_id == project_id)
+            .first()
+        )
+        return project if project else False

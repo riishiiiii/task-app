@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import Popup from "../popup";
+import { backendUrl, getTodoToken } from "../../helpers";
 
 const AddProjectForm = ({ setShowAddProject, onProjectAdded }) => {
   const [projectName, setProjectName] = useState("");
@@ -9,14 +10,7 @@ const AddProjectForm = ({ setShowAddProject, onProjectAdded }) => {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("");
 
-  const getTodoToken = () => {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="))
-      ?.split("=")[1];
-  };
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
+    
   const handleAddProject = async () => {
     if (projectName === "") {
       setPopupMessage("Please enter a project name");

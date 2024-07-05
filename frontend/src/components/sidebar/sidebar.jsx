@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import SidebarButton from "./sidebarbutton";
@@ -8,6 +8,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isTasksOpen, setIsTasksOpen] = useState(true);
+  const sidebarRef = useRef(null);
 
   const handleLogout = () => {
     document.cookie = "todoToken=; Max-Age=0; path=/;";
@@ -22,8 +23,21 @@ const Sidebar = () => {
     setIsTasksOpen(!isTasksOpen);
   };
 
+  const handleClickOutside = (event) => {
+    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative z-10">
+    <div className="relative z-10" ref={sidebarRef}>
       <button onClick={handleSidebarToggle} className="p-4 focus:outline-none">
         <svg
           className="w-6 h-6 text-black"

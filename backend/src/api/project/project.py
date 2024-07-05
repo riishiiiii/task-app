@@ -1,6 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
-from schemas.project import CreateProject, SingleProject
-from service.projectservice import ProjectService, ProjectNotFound
+from schemas.project import (
+    CreateProject,
+    SingleProject,
+)
+from service.projectservice import (
+    ProjectService,
+    ProjectNotFound,
+)
 from service.jwtservice import JWTBearerService
 from database import models
 from uuid import UUID
@@ -53,6 +59,8 @@ async def update_project(
     project_id: UUID,
     project: CreateProject,
     service: ProjectService = Depends(ProjectService),
-) -> dict:
-    await service.update_project(project_id, project)
-    return {"message": "Project updated successfully"}
+) -> None:
+    try:
+        await service.update_project(project_id, project)
+    except ProjectNotFound:
+        raise HTTPException(status_code=404, detail="Project not found")
