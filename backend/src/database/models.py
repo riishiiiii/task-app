@@ -64,10 +64,10 @@ class Project(Base):
     created_at = Column(DateTime(timezone=True))
 
 
-class ProjectStatus(Base):
-    __tablename__ = "project_status"
-    project_status_id = Column(Integer, primary_key=True)
-    status = Column(String(100))
+class TaskPriority(Base):
+    __tablename__ = "task_priority"
+    priority_id = Column(Integer, primary_key=True)
+    priority = Column(String(100))
 
 
 class ProjectLabels(Base):
@@ -78,6 +78,7 @@ class ProjectLabels(Base):
         UUID(as_uuid=True), ForeignKey("projects.project_id", ondelete="CASCADE")
     )
     project = relationship("Project")
+    created_at = Column(DateTime(timezone=True))
     __table_args__ = (UniqueConstraint("label", "project_id"),)
 
 
@@ -89,12 +90,12 @@ class ProjectTask(Base):
     )
     project = relationship("Project")
     task = Column(String(100))
-    status_id = Column(
+    priority_id = Column(
         Integer,
-        ForeignKey("project_status.project_status_id", ondelete="CASCADE"),
+        ForeignKey("task_priority.priority_id", ondelete="CASCADE"),
         nullable=True,
     )
-    status = relationship("ProjectStatus")
+    priority = relationship("TaskPriority")
     created_by = Column(
         UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE")
     )
@@ -106,6 +107,37 @@ class ProjectTask(Base):
     )
     label = relationship("ProjectLabels")
     created_at = Column(DateTime(timezone=True))
+    description = Column(String(1000), nullable=True)
+    due_date = Column(DateTime(timezone=True), nullable=True)
+    note = Column(String(1000), nullable=True)
+
+
+class TaskComments(Base):
+    __tablename__ = "task_comments"
+    comment_id = Column(UUID(as_uuid=True), primary_key=True)
+    comment = Column(String(1000))
+    project_task_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("project_tasks.project_task_id", ondelete="CASCADE"),
+    )
+    project_task = relationship("ProjectTask")
+    created_at = Column(DateTime(timezone=True))
+    created_by = Column(
+        UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE")
+    )
+    created_by_user = relationship("User")
+
+
+class TaskNotes(Base):
+    __tablename__ = "task_notes"
+    note_id = Column(UUID(as_uuid=True), primary_key=True)
+    note_title = Column(String(100))
+    note = Column(String(1000))
+    created_at = Column(DateTime(timezone=True))
+    created_by = Column(
+        UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE")
+    )
+    created_by_user = relationship("User")
 
 
 class ProjectMembers(Base):

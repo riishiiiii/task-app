@@ -4,14 +4,10 @@ import { useState, useEffect } from "react";
 import boy from "../../images/boy.png";
 import AddProjectForm from "./addProjectForm";
 import ProjectCard from "./projectCard";
+import { getTodoToken } from "../../helpers";
 
 const ProjectList = () => {
-  const getTodoToken = () => {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("todoToken="))
-      ?.split("=")[1];
-  };
+
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const [projects, setProjects] = useState([]);
   const [showAddProject, setShowAddProject] = useState(false);
