@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { backendUrl, getTodoToken } from "../../helpers";
-import { useParams } from "react-router-dom";
 import ProjectBoardBar from "./projectBoardBar";
 import { FaSearch } from "react-icons/fa";
 
@@ -15,9 +14,13 @@ const ProjectBoard = ({ projectId, onTaskClick }) => {
   const [projectInfo, setProjectInfo] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [labelSuggestion, setLabelSuggestion] = useState(false); 
+  
   useEffect(() => {
-    fetchLabelsAndTasks();
-    getProjectInfo();
+    const fetchProjectData = async () => {
+      await fetchLabelsAndTasks();
+      await getProjectInfo();
+    };
+    fetchProjectData();
   }, [projectId]);
 
   const getProjectInfo = async () => {
@@ -187,7 +190,7 @@ const ProjectBoard = ({ projectId, onTaskClick }) => {
   }));
 
   return (
-    <div className="h-screen bg-gradient-to-r from-blue-700 to-indigo-900 p-6">
+    <div className="h-screen bg-gradient-to-r from-blue-700 to-indigo-900 p-6 overflow-x-auto">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-white">{projectInfo.project_name}</h1>
@@ -206,7 +209,7 @@ const ProjectBoard = ({ projectId, onTaskClick }) => {
           </div>
         </div>
       </div>
-
+  
       <ProjectBoardBar
         columns={filteredColumns}
         projectId={projectId}
@@ -225,7 +228,7 @@ const ProjectBoard = ({ projectId, onTaskClick }) => {
         addLabel={addLabel}
         onTaskClick={onTaskClick}
         labelSuggestion={labelSuggestion}
-        setLabelSuggestion={setLabelSuggestion} 
+        setLabelSuggestion={setLabelSuggestion}
       />
     </div>
   );

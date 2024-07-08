@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FaPlus, FaPencilAlt, FaTrash, FaTag } from "react-icons/fa";
+
 
 const ProjectBoardBar = ({
   columns,
@@ -22,13 +23,15 @@ const ProjectBoardBar = ({
   setLabelSuggestion,
 }) => {
   const suggestedLabels = ["Backlog", "To Do", "In Progress", "Done"];
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAddingTask , setIsAddingTask] = useState(false);
 
-  const showLablesuggestion = () => {
+  const showLabelSuggestion = () => {
     setLabelSuggestion(true);
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd} onClick={() => setLabelSuggestion()}>
+    <DragDropContext onDragEnd={onDragEnd} onClick={(e) => setLabelSuggestion()  }>
       <div className="flex overflow-x-auto space-x-4 pb-4">
         {columns.map((column) => (
           <div
@@ -54,9 +57,9 @@ const ProjectBoardBar = ({
                 </button>
               </div>
             </div>
-
+  
             {editingLabelId === column.label_id && (
-              <div className="p-3 bg-gray-800">
+              <div className="p-3 bg-gray-800 border">
                 <input
                   type="text"
                   value={editingLabelName}
@@ -79,13 +82,14 @@ const ProjectBoardBar = ({
                 </div>
               </div>
             )}
-
+  
             <Droppable droppableId={column.label_id.toString()}>
               {(provided) => (
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className="bg-gray-700 p-3 min-h-[300px] flex-grow"
+                  className="bg-gray-700 p-3 flex-grow overflow-auto"
+                  style={{ maxHeight: '450px' }}
                 >
                   {column.tasks.map((task, index) => (
                     <Draggable
@@ -112,72 +116,101 @@ const ProjectBoardBar = ({
                 </div>
               )}
             </Droppable>
-
+  
             <div className="p-3 bg-gray-800">
-              <input
-                type="text"
-                value={newTaskNames[column.label_id] || ""}
-                onChange={(e) =>
-                  setNewTaskNames({
-                    ...newTaskNames,
-                    [column.label_id]: e.target.value,
-                  })
-                }
-                placeholder="Add a new task"
-                className="w-full p-2 mb-2 rounded bg-gray-700 text-white placeholder-gray-400"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    addTask(column.label_id);
-                  }
-                }}
-              />
-              <button
-                onClick={() => addTask(column.label_id)}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition-colors duration-200"
-              >
-                <FaPlus className="inline mr-2" /> Add Task
-              </button>
+              {isAddingTask ? (
+                <>
+                  <input
+                    type="text"
+                    value={newTaskNames[column.label_id] || ""}
+                    onChange={(e) =>
+                      setNewTaskNames({
+                        ...newTaskNames,
+                        [column.label_id]: e.target.value,
+                      })
+                    }
+                    placeholder="Add a new task"
+                    className="w-full p-2 mb-2 rounded bg-gray-700 text-white placeholder-gray-400"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        addTask(column.label_id);
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => addTask(column.label_id)}
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition-colors duration-200"
+                  >
+                    <FaPlus className="inline mr-2" /> Add Task
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => setIsAddingTask(true)}
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition-colors duration-200"
+                >
+                  <FaPlus className="inline mr-2" /> Add Task
+                </button>
+              )}
             </div>
           </div>
         ))}
-
-        <div className="flex-shrink-0 w-80">
-          <form
-            onSubmit={addLabel}
-            className="bg-gray-700 p-4 rounded-lg shadow-lg relative"
-          >
-            <input
-              type="text"
-              value={newLabelName}
-              onChange={(e) => setNewLabelName(e.target.value)}
-              placeholder="New label name"
-              className="w-full p-3 mb-2 rounded bg-gray-800 text-white placeholder-gray-400"
-              autoComplete="off"
-              onClick={() => showLablesuggestion()}
-            />
-            {labelSuggestion && (
-              <div className="bg-white p-2 mb-2 rounded-lg flex-shrink-0 w-70">
-                <ul className="list-none">
-                  {suggestedLabels.map((label) => (
-                    <li
-                      key={label}
-                      className="p-2 hover:bg-gray-600 cursor-pointer transition-colors duration-200"
-                      onClick={() => setNewLabelName(label)}
-                    >
-                      <FaTag className="inline mr-2" /> {label}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+  
+  <div className="flex-shrink-0 w-80">
+      {isAdding ? (
+        <form onSubmit={addLabel} className="bg-gray-700 p-2 rounded-lg shadow-lg relative">
+          <input
+            type="text"
+            value={newLabelName}
+            onChange={(e) => setNewLabelName(e.target.value)}
+            placeholder="Enter list title..."
+            className="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400"
+            autoComplete="off"
+            onClick={showLabelSuggestion}
+          />
+          {labelSuggestion && (
+            <div className="bg-gray-800 mt-1 rounded-lg w-full">
+              <ul className="list-none">
+                {suggestedLabels.map((label) => (
+                  <li
+                    key={label}
+                    className="p-2 hover:bg-gray-700 cursor-pointer transition-colors duration-200 text-white"
+                    onClick={() => {
+                      setNewLabelName(label);
+                      setLabelSuggestion(false);
+                    }}
+                  >
+                    <FaTag className="inline mr-2" /> {label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="flex mt-2">
             <button
               type="submit"
-              className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded transition-colors duration-200"
+              className="flex-grow bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-l transition-colors duration-200"
             >
-              <FaPlus className="inline mr-2" /> Add New Label
+              Add list
             </button>
-          </form>
-        </div>
+            <button
+              type="button"
+              onClick={() => setIsAdding(false)}
+              className="bg-gray-600 hover:bg-gray-500 text-white p-2 rounded-r transition-colors duration-200"
+            >
+              X
+            </button>
+          </div>
+        </form>
+      ) : (
+        <button
+          onClick={() => setIsAdding(true)}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded flex items-center justify-center transition-colors duration-200"
+        >
+          <FaPlus className="mr-2" /> Add another list
+        </button>
+      )}
+    </div>  
       </div>
     </DragDropContext>
   );

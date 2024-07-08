@@ -2,6 +2,7 @@ from pydantic import BaseModel, ConfigDict
 from uuid import UUID
 from datetime import datetime
 from typing import Optional
+import enum
 
 
 class CreateProject(BaseModel):
@@ -54,24 +55,6 @@ class CreateProjectTask(BaseModel):
     label_id: UUID
 
 
-class TaskNote(BaseModel):
-    note_id: UUID
-    note_title: str
-    note: str
-    created_at: datetime
-    created_by: UUID
-
-    @classmethod
-    def from_orm(cls, note_orm):
-        return cls(
-            note_id=note_orm.note_id,
-            note_title=note_orm.note_title,
-            note=note_orm.note,
-            created_at=note_orm.created_at,
-            created_by=note_orm.created_by,
-        )
-
-
 class ProjectTask(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     project_task_id: UUID
@@ -82,7 +65,7 @@ class ProjectTask(BaseModel):
     created_by_name: str
     created_at: datetime
     description: Optional[str] = None
-    priority: Optional[int] = None
+    priority: Optional[str] = None
     due_date: Optional[datetime] = None
     note: Optional[str] = None
 
@@ -97,7 +80,7 @@ class ProjectTask(BaseModel):
             created_by_name=task_orm.created_by_user.username,
             created_at=task_orm.created_at,
             description=task_orm.description,
-            priority=task_orm.priority,
+            priority=task_orm.priority.priority if task_orm.priority else None,
             due_date=task_orm.due_date,
             note=task_orm.note,
         )
@@ -117,9 +100,20 @@ class ChangeProjectLabel(BaseModel):
     label: UUID
 
 
+class TaskPrioity(enum.Enum):
+    LOW = "Low"
+    MEDIUM = "Medium"
+    HIGH = "High"
+    URGENT = "Urgent"
+    IMMEDIATE = "Immediate"
+    CRITICAL = "Critical"
+    BLOCKER = "Blocker"
+
+
 class UpdateProjectTask(BaseModel):
     task: Optional[str] = None
     description: Optional[str] = None
     priority: Optional[int] = None
     due_date: Optional[datetime] = None
     note: Optional[str] = None
+    priority: Optional[TaskPrioity] = None
