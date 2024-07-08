@@ -13,10 +13,13 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedNote, setEditedNote] = useState("");
   const [isEditingNote, setIsEditingNote] = useState(false);
+  const [editedPriority, setEditedPriority] = useState("");
+  const [isEditingPriority, setIsEditingPriority] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
   const titleInputRef = useRef(null);
+  const priorityInputRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -35,6 +38,7 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
         setEditedTitle(response.data.task);
         setEditedDescription(response.data.description || "");
         setEditedNote(response.data.note || "");
+        setEditedPriority(response.data.priority || "");
       } else {
         console.error("Failed to fetch task");
       }
@@ -72,7 +76,10 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
     if (isEditing && titleInputRef.current) {
       titleInputRef.current.focus();
     }
-  }, [isEditing]);
+    if (isEditingPriority && priorityInputRef.current) {
+      priorityInputRef.current.focus();
+    }
+  }, [isEditing, isEditingPriority]);
 
   const handleUpdate = async (field, value) => {
     try {
@@ -125,6 +132,17 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
     setIsEditingNote(false);
     if (editedNote !== task.note) {
       handleUpdate("note", editedNote);
+    }
+  };
+
+  const handlePriorityChange = (e) => {
+    setEditedPriority(e.target.value);
+  };
+
+  const handlePriorityBlur = () => {
+    setIsEditingPriority(false);
+    if (editedPriority !== task.priority) {
+      handleUpdate("priority", editedPriority);
     }
   };
 
@@ -184,7 +202,6 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
       if (response.status === 200) {
         onClose();
         navigate(`/project/${projectId}`);
-        
       } else {
         console.error("Failed to delete task");
       }
@@ -192,7 +209,6 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
       console.error("Error deleting task:", error);
     }
   };
-
 
   if (!task) {
     return <div className="text-center p-8">Loading...</div>;
@@ -253,11 +269,48 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
               className="bg-transparent border-b-2 border-pink-400 focus:outline-none text-white"
             />
           </div>
-          <InfoItem
-            label="Priority"
-            value={task.priority || "Not set"}
-            isPriority
-          />
+          <div>
+            <p className="text-sm text-pink-300 mb-1">Priority</p>
+            <div className="relative">
+              <select
+                value={task.priority || "Not set"}
+                onChange={(e) => handleUpdate("priority", e.target.value)}
+                className={`appearance-none border-b-2 border-pink-400 focus:outline-none text-black bg-transparent font-medium  ${getPriorityClass(
+                  task.priority
+                )}`}
+              >
+                <option value="Low" style={{ backgroundColor: "green", color: "white", borderRadius: "5px" }}>
+                  Low
+                </option>
+                <option value="Medium" style={{ backgroundColor: "yellow", color: "black", borderRadius: "5px" }}>
+                  Medium
+                </option>
+                <option value="High" style={{ backgroundColor: "orange", color: "white", borderRadius: "5px" }}>
+                  High
+                </option>
+                <option value="Urgent" style={{ backgroundColor: "red", color: "white", borderRadius: "5px" }}>
+                  Urgent
+                </option>
+                <option value="Immediate" style={{ backgroundColor: "purple", color: "white", borderRadius: "5px" }}>
+                  Immediate
+                </option>
+                <option value="Critical" style={{ backgroundColor: "brown", color: "white", borderRadius: "5px" }}>
+                  Critical
+                </option>
+                <option
+                  value="Blocker"
+                  style={{ backgroundColor: "black", color: "white", borderRadius: "5px" }}
+                >
+                  Blocker
+                </option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 15l-5-5 1.41-1.41L12 12.17l6.59-6.59L18 10l-6 6z" />
+                </svg>
+              </div>
+            </div>
+          </div>
           <InfoItem label="Label" value={task.label || "None"} />
         </div>
 
@@ -312,7 +365,6 @@ const TaskDescription = ({ projectId, taskId, onClose }) => {
             </p>
           )}
         </div>
-
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-3 text-pink-300">Comments</h2>
           <div className="space-y-4">
@@ -372,6 +424,10 @@ const getPriorityClass = (priority) => {
     High: "text-red-400",
     Medium: "text-yellow-400",
     Low: "text-green-400",
+    Urgent: "text-red-600",
+    Immediate: "text-red-700",
+    Critical: "text-brown-700",
+    Blocker: "text-black",
   };
   return classes[priority] || "text-gray-400";
 };

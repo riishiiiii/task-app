@@ -8,7 +8,6 @@ from schemas.project import (
     ProjectTask,
     ChangeProjectLabel,
     UpdateProjectTask,
-    TaskNote,
 )
 from database import models
 from datetime import datetime, timezone
@@ -150,12 +149,15 @@ class ProjectTaskService:
             update_dict["task"] = task.task
         if task.description is not None:
             update_dict["description"] = task.description
-        if task.priority is not None:
-            update_dict["priority"] = task.priority
         if task.due_date is not None:
             update_dict["due_date"] = task.due_date
         if task.note is not None:
             update_dict["note"] = task.note
+        if task.priority is not None:
+            print(self.get_priority(task.priority.value).priority_id)
+            update_dict["priority_id"] = self.get_priority(
+                task.priority.value
+            ).priority_id
         try:
             self.db.query(models.ProjectTask).filter(
                 models.ProjectTask.project_task_id == task_id
@@ -165,6 +167,14 @@ class ProjectTaskService:
         except Exception as e:
             self.db.rollback()
             raise e
+
+    def get_priority(self, priority: str) -> models.TaskPriority:
+        priority = (
+            self.db.query(models.TaskPriority)
+            .filter(models.TaskPriority.priority == priority)
+            .first()
+        )
+        return priority
 
     async def delete_project_task(
         self, project_id: uuid.UUID, task_id: uuid.UUID
